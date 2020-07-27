@@ -1,11 +1,11 @@
 <?php
 
-namespace MCS;
+namespace JW;
 
 use DateTime;
 use Exception;
 use DateTimeZone;
-use MCS\MWSEndPoint;
+use JW\MWSEndPoint;
 use League\Csv\Reader;
 use League\Csv\Writer;
 use SplTempFileObject;
