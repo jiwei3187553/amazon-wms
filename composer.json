@@ -19,7 +19,7 @@
     "require-dev": {},
     "autoload": {
         "psr-4": {
-            "MCS\\": "src"
+            "EVEN\\": "src"
         }
     }
 }
