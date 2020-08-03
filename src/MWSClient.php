@@ -1471,4 +1471,57 @@ class MWSClient
 
 
 
+    /**
+     * 订单标记发货
+     * @param array $data required data
+     * @return array feed submission result
+     * @throws Exception
+     */
+    public function setDeliveryState(array $data)
+    {
+        if (!isset($data["shippingDate"])) {
+            $data["shippingDate"] = date("c");
+        }
+
+        if (!isset($data["carrierCode"]) && !isset($data["carrierName"])) {
+            throw new Exception('Missing required carrier data');
+        }
+
+        $feed = [
+            'MessageType' => 'OrderFulfillment',
+            'Message' => [
+                'MessageID' => rand(),
+                "OrderFulfillment" => [
+                    "AmazonOrderID" => $data["orderId"],
+                    "FulfillmentDate" => $data["shippingDate"]
+                ]
+            ]
+        ];
+        $fulfillmentData = [];
+
+
+        if (isset($data["carrierCode"])) {
+            $fulfillmentData["CarrierCode"] = $data["carrierCode"];
+        } elseif (isset($data["carrierName"])) {
+            $fulfillmentData["CarrierName"] = $data["carrierName"];
+        }
+
+        if (isset($data["shippingMethod"])) {
+            $fulfillmentData["ShippingMethod"] = $data["shippingMethod"];
+        }
+
+
+        if (isset($data["trackingCode"])) {
+            $fulfillmentData["ShipperTrackingNumber"] = $data["trackingCode"];
+        }
+
+        if (sizeof($fulfillmentData) > 0) {
+            $feed["Message"]["OrderFulfillment"]["FulfillmentData"] = $fulfillmentData;
+        }
+        $feed = $this->SubmitFeed('_POST_ORDER_FULFILLMENT_DATA_', $feed);
+
+        return $feed;
+    }
+
+
 }
