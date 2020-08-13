@@ -387,7 +387,7 @@ class MWSClient
      * @param string $FulfillmentChannel
      * @return array
      */
-    public function ListOrders(DateTime $from, $allMarketplaces = false, $states = [
+    public function ListOrders(DateTime $from,DateTime $end = Null, $allMarketplaces = false, $states = [
         'Unshipped', 'PartiallyShipped'
     ], $FulfillmentChannels = 'MFN')
     {
@@ -395,6 +395,11 @@ class MWSClient
             'CreatedAfter' => gmdate(self::DATE_FORMAT, $from->getTimestamp())
         ];
 
+        if (isset($end)){
+            $query = [
+                'CreatedBefore' => gmdate(self::DATE_FORMAT, $from->getTimestamp())
+            ];
+        }
         $counter = 1;
         foreach ($states as $status) {
             $query['OrderStatus.Status.' . $counter] = $status;
