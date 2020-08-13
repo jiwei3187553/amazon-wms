@@ -387,7 +387,7 @@ class MWSClient
      * @param string $FulfillmentChannel
      * @return array
      */
-    public function ListOrders(DateTime $from,DateTime $end = Null, $allMarketplaces = false, $states = [
+    public function ListOrders(DateTime $from,DateTime $end, $allMarketplaces = false, $states = [
         'Unshipped', 'PartiallyShipped'
     ], $FulfillmentChannels = 'MFN')
     {
@@ -395,10 +395,8 @@ class MWSClient
             'CreatedAfter' => gmdate(self::DATE_FORMAT, $from->getTimestamp())
         ];
 
-        if (isset($end)){
-            $query = [
-                'CreatedBefore' => gmdate(self::DATE_FORMAT, $from->getTimestamp())
-            ];
+        if (!empty($end)){
+            $query['CreatedBefore'] =  gmdate(self::DATE_FORMAT, $end->getTimestamp());
         }
         $counter = 1;
         foreach ($states as $status) {
@@ -425,7 +423,6 @@ class MWSClient
         }
 
         $response = $this->request('ListOrders', $query);
-
         if (isset($response['ListOrdersResult']['Orders']['Order'])) {
             if (isset($response['ListOrdersResult']['NextToken'])) {
                 $data['ListOrders'] = $response['ListOrdersResult']['Orders']['Order'];
