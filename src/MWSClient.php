@@ -933,35 +933,6 @@ class MWSClient
 
 
 
-    /**
-     * Post to create or update a Marked For Delivery (_POST_FLAT_FILE_FULFILLMENT_DATA_)
-     * @param object $MWSProduct or array of MWSProduct objects
-     * @return array
-     */
-    public function postMarkedDelivery($MWSProduct)
-    {
-        if (!is_array($MWSProduct)) {
-            $MWSProduct = [$MWSProduct];
-        }
-
-        $encoding = in_array($this->config['Marketplace_Id'], ['AAHKV2X7AFYLW', 'A1VC38T7YXB528']) ?
-            'UTF-8' : 'iso-8859-16';
-        $csv = Writer::createFromFileObject(new SplTempFileObject());
-        $csv->setDelimiter("\t");
-        $csv->setInputEncoding($encoding);
-        $csv->insertOne(['order-id', 'order-item-id','quantity', 'ship-date','carrier-code','carrier-name','tracking-number','ship-method','transparency_code']);
-        foreach ($MWSProduct as $product) {
-            $csv->insertOne(
-                array_values($product)
-            );
-        }
-        return $this->SubmitFeed('_POST_FLAT_FILE_FULFILLMENT_DATA_', $csv);
-
-
-    }
-
-
-
 
     /**
      * Returns the feed processing report and the Content-MD5 header.
@@ -1564,6 +1535,36 @@ class MWSClient
 
         return $feed;
     }
+
+
+    /**
+     * Post to create or update a Marked For Delivery (_POST_FLAT_FILE_FULFILLMENT_DATA_)
+     * @param object $MWSProduct or array of MWSProduct objects
+     * @return array
+     */
+    public function postMarkedDelivery($MWSProduct)
+    {
+        if (!is_array($MWSProduct)) {
+            $MWSProduct = [$MWSProduct];
+        }
+
+        $encoding = in_array($this->config['Marketplace_Id'], ['AAHKV2X7AFYLW', 'A1VC38T7YXB528']) ?
+            'UTF-8' : 'iso-8859-16';
+        $csv = Writer::createFromFileObject(new SplTempFileObject());
+        $csv->setDelimiter("\t");
+        $csv->setInputEncoding($encoding);
+        $csv->insertOne(['order-id', 'order-item-id','quantity', 'ship-date','carrier-code','carrier-name','tracking-number','ship-method','transparency_code']);
+        foreach ($MWSProduct as $product) {
+            $csv->insertOne(
+                array_values($product)
+            );
+        }
+        return $this->SubmitFeed('_POST_FLAT_FILE_FULFILLMENT_DATA_', $csv);
+
+
+    }
+
+
 
 
 }
