@@ -1559,6 +1559,7 @@ class MWSClient
                 array_values($product)
             );
         }
+        
         return $this->SubmitFeed('_POST_FLAT_FILE_FULFILLMENT_DATA_', $csv);
 
 
