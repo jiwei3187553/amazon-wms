@@ -1,5 +1,5 @@
 <?php 
-namespace EVEN;
+namespace even;
 
 use Exception;
 

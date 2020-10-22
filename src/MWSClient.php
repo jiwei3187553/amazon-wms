@@ -1,11 +1,11 @@
 <?php
 
-namespace EVEN;
+namespace even;
 
 use DateTime;
 use Exception;
 use DateTimeZone;
-use EVEN\MWSEndPoint;
+use even\MWSEndPoint;
 use League\Csv\Reader;
 use League\Csv\Writer;
 use SplTempFileObject;
@@ -1559,7 +1559,7 @@ class MWSClient
                 array_values($product)
             );
         }
-        
+
         return $this->SubmitFeed('_POST_FLAT_FILE_FULFILLMENT_DATA_', $csv);
 
 
